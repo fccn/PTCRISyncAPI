@@ -1,0 +1,14 @@
+# ignore config
+*.properties
+
+# ignore bin, log paths
+/bin
+/log
+
+# ignore mvn target
+/target
+
+# ignore eclipse
+.classpath
+.settings
+.project

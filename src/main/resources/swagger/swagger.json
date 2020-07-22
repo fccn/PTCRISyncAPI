@@ -1,0 +1,419 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "0.0.1-alpha",
+		"title": "PTCRISync webservice",
+		"description": "This is an interface for PTCRISync library."
+	},
+	"host": "localhost:8080",
+	"basePath": "/v2.0_rc1",
+	"schemes": [
+		"http",
+		"https"
+	],
+	"securityDefinitions": {
+		"apikey": {
+			"type": "apiKey",
+			"name": "apikey",
+			"description": "Api key, you must obtain a valid key to use this API",
+			"in": "header"
+		}
+	},
+	"security": [
+		{
+			"apikey": []
+		}
+	],
+	"tags": [
+		{
+			"name": "work",
+			"description": "Works operations"
+		}
+	],
+	"paths": {
+		"/{orcid}/progress": {
+			"get": {
+				"operationId": "getProgress",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "orcid",
+						"in": "path",
+						"description": "person ORCID ID",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"description": "Get the `Progress` of the process\n",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					}
+				}
+			}
+		},
+		"/{orcid}/work/export": {
+			"post": {
+				"tags": [
+					"work"
+				],
+				"operationId": "postWorkExport",
+				"produces": [
+					"application/json"
+				],
+				"consumes": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "orcid",
+						"in": "path",
+						"description": "person ORCID ID",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "token",
+						"in": "header",
+						"description": "ORCID token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "force",
+						"in": "query",
+						"description": "Export all `Works` forcing if even no updates exists",
+						"required": false,
+						"type": "boolean"
+					},
+					{
+						"name": "localWorks",
+						"in": "body",
+						"description": "Import updates, only get different works or Import invalid updates.",
+						"required": false,
+						"schema": {
+							"$ref": "#/definitions/WorkList"
+						}
+					}
+				],
+				"description": "Export all `Works`\n",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/WorkExportResults"
+						}
+					},
+					"201": {
+						"description": "Created - at least one",
+						"schema": {
+							"$ref": "#/definitions/WorkExportResults"
+						}
+					},
+					"202": {
+						"description": "Accepted",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					},
+					"400": {
+						"description": "Bad request - Invalid or missing data",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					}
+				}
+			}
+		},
+		"/{orcid}/work/import": {
+			"post": {
+				"tags": [
+					"work"
+				],
+				"operationId": "postWorkImport",
+				"produces": [
+					"application/json"
+				],
+				"consumes": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "orcid",
+						"in": "path",
+						"description": "person ORCID ID",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "token",
+						"in": "header",
+						"description": "ORCID token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "update",
+						"in": "query",
+						"description": "Import updates, only get different works.",
+						"required": false,
+						"type": "boolean"
+					},
+					{
+						"name": "localWorks",
+						"in": "body",
+						"description": "All Local Works (except for query update=true).",
+						"required": false,
+						"schema": {
+							"$ref": "#/definitions/WorkList"
+						}
+					}
+				],
+				"description": "Import all `Works`\n",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/WorkList"
+						}
+					},
+					"202": {
+						"description": "Accepted",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					},
+					"400": {
+						"description": "Bad request - Invalid or missing data",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					}
+				}
+			}
+		},
+		"/{orcid}/work/invalid": {
+			"post": {
+				"tags": [
+					"work"
+				],
+				"operationId": "postWorkImportInvalid",
+				"produces": [
+					"application/json"
+				],
+				"consumes": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "orcid",
+						"in": "path",
+						"description": "person ORCID ID",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "token",
+						"in": "header",
+						"description": "ORCID token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "localWorks",
+						"in": "body",
+						"description": "All Local Works.",
+						"required": false,
+						"schema": {
+							"$ref": "#/definitions/WorkList"
+						}
+					}
+				],
+				"description": "Import all `Works`\n",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/WorkInvalidResults"
+						}
+					},
+					"400": {
+						"description": "Bad request - Invalid or missing data",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					}
+				}
+			}
+		},
+		"/{orcid}/work/counter": {
+			"post": {
+				"tags": [
+					"work"
+				],
+				"operationId": "postWorkCounter",
+				"produces": [
+					"application/json"
+				],
+				"consumes": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "orcid",
+						"in": "path",
+						"description": "person ORCID ID",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "token",
+						"in": "header",
+						"description": "ORCID token",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "localWorks",
+						"in": "body",
+						"description": "All the Local Works",
+						"required": false,
+						"schema": {
+							"$ref": "#/definitions/WorkList"
+						}
+					}
+				],
+				"description": "Get the `Progress` of the process\n",
+				"responses": {
+					"200": {
+						"description": "Return the number of works to import (the counter)",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					},
+					"400": {
+						"description": "Bad request - Invalid or missing data",
+						"schema": {
+						  "$ref" : "#/definitions/ApiResponseMessage"
+						}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"WorkList": {
+			"type": "array",
+			"items": {
+				"$ref": "https://api.orcid.org/resources/swagger.json#/definitions/Work"
+			}
+		},
+		"WorkInvalidResults": {
+		  "type": "array",
+			"items": {
+				"$ref": "#/definitions/WorkInvalidResult"
+			}
+		},
+		"WorkInvalidResult": {
+			"type": "object",
+			"required": [
+				"work",
+				"error"
+			],
+			"properties": {
+			  "work": {
+			    "$ref": "https://api.orcid.org/resources/swagger.json#/definitions/Work"
+			    },
+				"error": {
+					"type": "array",
+					"items": {
+					  "type": "string"
+					}
+				}
+		  }
+		},
+		"WorkExportResults": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/WorkExportResult"
+			}
+		},
+		"WorkExportResult": {
+			"type": "object",
+			"required": [
+				"putCode",
+				"PTCRISyncResult"
+			],
+			"properties": {
+				"putCode": {
+					"type": "string"
+				},
+				"PTCRISyncResult": {
+					"type": "object",
+					"required": [
+						"code"
+					],
+					"properties": {
+						"code": {
+							"type": "integer",
+							"enum": [
+								"-5",
+								"-10",
+								"-20",
+								"-30",
+								"-40"
+							]
+						},
+            "type": {
+							"type": "string",
+							"enum": [
+								"ADDOK",
+								"UPDATEOK",
+								"UPTODATE",
+								"INVALID",
+								"CLIENTERROR"
+							]
+						},						
+						"exception": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"ApiResponseMessage": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "integer",
+					"enum": [
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"error",
+						"warning",
+						"info",
+						"ok",
+						"too busy",
+						"unknown"
+					]
+				},
+				"message": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

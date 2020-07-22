@@ -1,0 +1,7 @@
+# to access the member api, you should request an access token
+orcid.login_url = https://orcid.org
+orcid.api_url = https://api.orcid.org
+orcid.redirect_url = https://developers.google.com/oauthplayground
+
+orcid.client_id = XXX-XXXXXXXXXXXXXXXXXXX
+orcid.client_secret = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
